@@ -8,6 +8,8 @@ const cookieParser = require('cookie-parser')
 const isLoggedIn = require('./utils/isLoggedIn')
 const authChecker = require('./utils/authChecker')
 
+
+
 let app = express()
 
 app.set('views', path.join(__dirname, 'views'))
@@ -24,15 +26,6 @@ app.use(cookieParser('super-secret'))
 
 let user = {}
 
-app.use(session({
-    secret: 'super-secret',
-    saveUninitialized: false,
-    resave: false,
-    cookie: {
-        secure: false,
-        maxAge: 365 * 24 * 60 * 60 * 1000
-    }
-}))
 
 app.use(expressValidator({
     errorFormatter: function(params, message, value) {
@@ -118,11 +111,11 @@ app.get('/register', isLoggedIn, function (req, res, next) {
 })
 
 app.get('/users/login', isLoggedIn, function (req, res) {
-    res.render('login', { success_msg: false, error_msg: false })
+    res.render('login', { success_msg: false, error_msg: false })//render login.ejs
 })
 
 app.get('/users/logout', function (req, res) {
-    req.session.destroy()
+    req.session.destroy()//end session
 
     res.redirect('/show-me-my-page')
 })
@@ -153,6 +146,6 @@ app.get('*', function (req, res) {
 
 let server = http.createServer(app)
 
-server.listen(3000, function () {
+server.listen(3001, function () {
     console.log('Server is running on port 3000')
 })
