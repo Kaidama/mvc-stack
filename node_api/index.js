@@ -2,15 +2,14 @@ const express = require('express')
 const http    = require('http')
 const path    = require('path')
 const logger  = require('morgan')
-const session = require('express-session')
 const expressValidator = require('express-validator')
 const cookieParser = require('cookie-parser')
 const isLoggedIn = require('./utils/isLoggedIn')
 const authChecker = require('./utils/authChecker')
+const app = require('../node_mvc/app')
 
 
 
-let app = express()
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -22,7 +21,7 @@ app.use(logger('dev'))
 
 // Built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser
 app.use(express.json())
-app.use(cookieParser('super-secret'))
+
 
 let user = {}
 
