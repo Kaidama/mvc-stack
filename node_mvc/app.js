@@ -1,18 +1,24 @@
-var createError = require('http-errors');
+//*nodemon* *mongod* *postman* *mongoose* *roboT*
+
+
+//this is your entry point to your app
+
+var createError = require('http-errors');``
+
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-let mongoose = require('mongoose')
+var mongoose = require('mongoose');
 
-// Mongoose database
-mongoose.connect('mongodb://localhost/api-users', 
-                { useNewUrlParser: true }, 
-                function (err) {
-                    if (err) console.log(`Error: ${err}`)
-                    else     console.log('Mongodb connected')
-                }
-)
+
+//Mongoose data connects to mongodb database
+mongoose.connect('mongodb://localhost/api-users', { useNewUrlParser: true}, (err) => {
+  if (err) console.log(`Error: ${err}`);
+    else console.log('mongodb connection') 
+})
+
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -29,7 +35,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//if you are at root http://.....com/ level uses index.js
 app.use('/', indexRouter);
+
+//if you are at http:/....com/users ** uses users.js
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
