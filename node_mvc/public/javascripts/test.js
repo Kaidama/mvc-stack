@@ -1,1 +1,1 @@
-console.log('heyyyyyyy')
+console.log('local JS script worked!')

@@ -2,14 +2,13 @@ const express = require('express')
 const http    = require('http')
 const path    = require('path')
 const logger  = require('morgan')
+const session = require('express-session')
 const expressValidator = require('express-validator')
 const cookieParser = require('cookie-parser')
 const isLoggedIn = require('./utils/isLoggedIn')
 const authChecker = require('./utils/authChecker')
-const app = require('../node_mvc/app')
 
-
-
+let app = express()
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -21,10 +20,19 @@ app.use(logger('dev'))
 
 // Built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser
 app.use(express.json())
-
+app.use(cookieParser('super-secret'))
 
 let user = {}
 
+app.use(session({
+    secret: 'super-secret',
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+        secure: false,
+        maxAge: 365 * 24 * 60 * 60 * 1000
+    }
+}))
 
 app.use(expressValidator({
     errorFormatter: function(params, message, value) {
@@ -110,11 +118,11 @@ app.get('/register', isLoggedIn, function (req, res, next) {
 })
 
 app.get('/users/login', isLoggedIn, function (req, res) {
-    res.render('login', { success_msg: false, error_msg: false })//render login.ejs
+    res.render('login', { success_msg: false, error_msg: false })
 })
 
 app.get('/users/logout', function (req, res) {
-    req.session.destroy()//end session
+    req.session.destroy()
 
     res.redirect('/show-me-my-page')
 })
@@ -145,6 +153,6 @@ app.get('*', function (req, res) {
 
 let server = http.createServer(app)
 
-server.listen(3001, function () {
+server.listen(3000, function () {
     console.log('Server is running on port 3000')
 })
